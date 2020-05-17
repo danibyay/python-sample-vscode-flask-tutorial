@@ -1,28 +1,28 @@
-from datetime import datetime
-from flask import Flask, render_template
+from flask import Flask, render_template, flash, redirect, url_for
 from . import app
+from .forms import LoginForm
 
 @app.route("/")
-def home():
-    return render_template("home.html")
+@app.route('/index')
+def index():
+    user = {'username': 'Daniela'}
+    posts = [
+        {
+            'author': {'username': 'John'},
+            'body': 'Beautiful day in Portland!'
+        },
+        {
+            'author': {'username': 'Susan'},
+            'body': 'The Avengers movie was so cool'
+        }
+    ]
+    return render_template('index.html', title='Home', user=user, posts=posts)
 
-@app.route("/about/")
-def about():
-    return render_template("about.html")
-
-@app.route("/contact/")
-def contact():
-    return render_template("contact.html")
-
-@app.route("/hello/")
-@app.route("/hello/<name>")
-def hello_there(name = None):
-    return render_template(
-        "hello_there.html",
-        name=name,
-        date=datetime.now()
-    )
-
-@app.route("/api/data")
-def get_data():
-    return app.send_static_file("data.json")
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        flash('Login requested for user {}, remember_me={}'.format(
+            form.username.data, form.remember_me.data))
+        return redirect(url_for('index'))
+    return render_template('login.html', title='Sign In', form=form)
