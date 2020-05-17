@@ -1,26 +1,36 @@
 <html>
     <head>
+      <meta charset="utf-8" />
       {% if title %}
       <title>{{ title }} - Microblog</title>
       {% else %}
       <title>Welcome to Microblog</title>
       {% endif %}
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='site.css') }}"  />
     </head>
     <body>
-        <div>Microblog: 
-          <a href="{{ url_for('index') }}">Home</a>
-          <a href="{{ url_for('login') }}">Login</a>
+        <div class="navbar">Article CMS: 
+          <a href="{{ url_for('index') }}" class="navbar-item">Home</a>
+          <a href="{{ url_for('login') }}" class="navbar-item">Login</a>
         </div>
         <hr>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
-        {% block content %}{% endblock %}
+        <div class="body-content">
+          {% with messages = get_flashed_messages() %}
+          {% if messages %}
+          <ul>
+              {% for message in messages %}
+              <li>{{ message }}</li>
+              {% endfor %}
+          </ul>
+          {% endif %}
+          {% endwith %}
+
+          {% block content %}{% endblock %}
+
+          <hr/>
+          <footer>
+              <p>&copy; Daniela Becerra</p>
+          </footer>
+        </div>
     </body>
 </html>
