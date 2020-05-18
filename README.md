@@ -49,3 +49,33 @@ Apply changes in the database
 > flask db upgrade
 
 After updating the database uri, runupgrade again, so the database will be created in the remote server.
+
+## Start the python interpreter with all the flask dependencies of your app installed
+
+> flask shell
+
+
+## Troubleshooting with Database URI
+
+Right now the URI is hardcoded. Follow this advice to fix the string format in the migrations/env.py file.
+(Flask issue, SQLAlchemy works)
+[Link 1](https://stackoverflow.com/questions/61710596/cant-apply-flask-db-migrate-when-using-pyodbc-w-sql-server-error-neither-dsn)
+
+[Link 2](https://stackoverflow.com/questions/46739295/connect-to-mssql-database-using-flask-sqlalchemy)
+
+[Link 3](https://github.com/miguelgrinberg/Flask-Migrate/issues/328#issuecomment-629870874)
+
+Test command on independent script:
+
+> print(engine_azure.table_names())
+
+output: 
+
+> 2020-05-18 01:42:24,631 INFO sqlalchemy.engine.base.Engine ('dbo', 'BASE TABLE')
+['alembic_version', 'post', 'user']
+
+## NExt step May 17
+
+* Commit changes to master and verify with pipeline deployment (merge branch & push to origin)
+
+* but before, upgrade requirements.txt, even if the database is not visibly working in the app, the imports would break.

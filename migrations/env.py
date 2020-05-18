@@ -22,9 +22,12 @@ logger = logging.getLogger('alembic.env')
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 from flask import current_app
-config.set_main_option(
-    'sqlalchemy.url',
-    str(current_app.extensions['migrate'].db.engine.url).replace('%', '%%'))
+config.set_main_option('sqlalchemy.url', 
+    'mssql+pyodbc:///?odbc_connect=Driver%3D%7BODBC+Driver+17+for+SQL+Server%7D%3BServer%3Dtcp%3Amicroblog.database.windows.net%2C1433%3BDatabase%3Dmicroblog%3BUid%3Dhellodarkness%3BPwd%3DfidgetCube1%3BEncrypt%3Dyes%3BTrustServerCertificate%3Dno%3BConnection+Timeout%3D30%3B'
+    .replace('%', '%%'))
+#config.set_main_option(
+#    'sqlalchemy.url',
+#    str(current_app.extensions['migrate'].db.engine.url).replace('%', '%%'))
 target_metadata = current_app.extensions['migrate'].db.metadata
 
 # other values from the config, defined by the needs of env.py,
