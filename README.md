@@ -20,3 +20,32 @@ When you submit a pull request, a CLA-bot automatically determines whether you n
 * This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 * For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 * Contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
+
+## Added dependencies
+
+> pip install flask-wtf
+
+> pip install flask-sqlalchemy
+
+> pip install flask-migrate
+
+## To run the development server
+
+> export FLASK_APP=startup.py
+
+> flask run
+
+## To use Flask-Migrate
+
+Only the first time. 
+> flask db init
+
+Generate migration script.
+the -m message is optional.
+> flask db migrate -m "users table"
+
+Apply changes in the database
+> flask db upgrade
+
+After updating the database uri, runupgrade again, so the database will be created in the remote server.
