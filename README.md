@@ -32,6 +32,8 @@ When you submit a pull request, a CLA-bot automatically determines whether you n
 
 ## To run the development server
 
+> source venv/bin/activate
+
 > export FLASK_APP=startup.py
 
 > flask run
