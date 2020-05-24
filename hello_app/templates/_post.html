@@ -1,6 +1,14 @@
 <table>
     <tr valign="top">
         <td><img src="{{ post.author.avatar(36) }}"></td>
-        <td>{{ post.author.username }} says:<br>{{ post.body }}</td>
+        <td>{{ post.author.username }} wrote:
+            <br>
+            {% if post.title %} Title: {{ post.title }}{% endif %}
+            <br>
+            {{ post.body }}
+            <br>
+            {% if post.writer %} By : {{ post.writer }}{% endif %}
+        </td>
     </tr>
+    <hr>
 </table>
