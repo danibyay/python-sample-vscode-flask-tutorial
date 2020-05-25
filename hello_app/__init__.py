@@ -16,7 +16,7 @@ migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = 'login'
 # Azure Blob Storage
-os.getenv('AZURE_STORAGE_CONNECTION_STRING')
+az_connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
 blob_service_client = BlobServiceClient.from_connection_string(az_connect_str)
 container_name = "domingocontainer9898"
 container_client = blob_service_client.get_container_client(container_name)
