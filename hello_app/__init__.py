@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
+import os
 
 
 app = Flask(__name__)    # Create an instance of the class for our use
