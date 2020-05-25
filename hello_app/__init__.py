@@ -16,6 +16,7 @@ login = LoginManager(app)
 login.login_view = 'login'
 # Azure Blob Storage
 az_connect_str = "DefaultEndpointsProtocol=https;EndpointSuffix=core.windows.net;AccountName=domingostorage9898;AccountKey=RfznV6ibGv9eX9Y6ImQAXzmRID5UCgiAY9I15YH2PPII9ZQABDwGh7ElHnTFIZzcXU2Q4O6DjPJQOLwU6ARncg=="
+#os.getenv('AZURE_STORAGE_CONNECTION_STRING')
 blob_service_client = BlobServiceClient.from_connection_string(az_connect_str)
 container_name = "domingocontainer9898"
 container_client = blob_service_client.get_container_client(container_name)
