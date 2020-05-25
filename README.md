@@ -81,3 +81,11 @@ output:
 * Commit changes to master and verify with pipeline deployment (merge branch & push to origin)
 
 * but before, upgrade requirements.txt, even if the database is not visibly working in the app, the imports would break.
+
+## ENV VARIABLES
+
+Get connection string
+> az storage account show-connection-string --name $domingostorage9898
+
+Set connection string for the storage account in your console.
+> export AZURE_STORAGE_CONNECTION_STRING="DefaultEndpoints....=="
