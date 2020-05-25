@@ -85,7 +85,7 @@ output:
 ## ENV VARIABLES
 
 Get connection string
-> az storage account show-connection-string --name $domingostorage9898
+> az storage account show-connection-string --name domingostorage9898
 
 Set connection string for the storage account in your console.
 > export AZURE_STORAGE_CONNECTION_STRING="DefaultEndpoints....=="
