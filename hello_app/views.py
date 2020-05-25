@@ -11,7 +11,23 @@ from werkzeug.urls import url_parse
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import os, uuid
+from datetime import datetime, timedelta
+from azure.storage.blob import ResourceTypes, AccountSasPermissions, generate_account_sas
+from azure.storage.blob import generate_blob_sas, BlobSasPermissions
 
+def get_img_url_with_blob_sas_token(blob_name):
+    blob_sas_token = generate_blob_sas(
+        account_name=blob_service_client.account_name,
+        container_name=container_name,
+        blob_name=blob_name,
+        account_key=blob_service_client.credential.account_key,
+        permission=BlobSasPermissions(read=True),
+        expiry=datetime.utcnow() + timedelta(hours=24)
+    )
+    blob_url_with_blob_sas_token = "https://{}.blob.core.windows.net/{}/{}?{}".format(
+        blob_service_client.account_name, container_name, blob_name, blob_sas_token
+    )
+    return blob_url_with_blob_sas_token
 
 @app.route("/", methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -24,15 +40,20 @@ def index():
         image_data = form.photo.data
         # I need to get the original path-to-file
         filename = secure_filename(image_data.filename)
+        # this is cwd/instance/photos   so I would need to recreate it in my production env. or do sth else.
         full_to_save_path = os.path.join(app.instance_path, 'photos', filename)
         image_data.save(full_to_save_path)
-
-        blob_client = blob_service_client.get_blob_client(container=container_name, blob="myfile" + str(uuid.uuid4()) + ".png")
+        ## Create blob
+        blob_name = "myfile" + str(uuid.uuid4()) + ".png"
+        blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
         with open(full_to_save_path, "rb") as data:
             blob_client.upload_blob(data)
+        ## generate URL
+        img_url_with_sas_token = get_img_url_with_blob_sas_token(blob_name)
 
 
-        post = Post(title=form.post_title.data, writer=form.post_author.data, body=form.post_body.data, author=current_user, image_name=filename)
+        post = Post(title=form.post_title.data, writer=form.post_author.data, 
+            body=form.post_body.data, author=current_user, image_name=filename, image_url=img_url_with_sas_token)
         db.session.add(post)
         db.session.commit()
         flash('Your post is now live!')
@@ -41,7 +62,7 @@ def index():
         
         
     posts = Post.query.all()
-    return render_template('index.html', title='Home Page', form=form, posts=posts) ## add a render element of image
+    return render_template('index.html', title='Home Page', form=form, posts=posts)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

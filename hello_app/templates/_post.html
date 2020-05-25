@@ -9,6 +9,11 @@
             <br>
             {% if post.writer %} By : {{ post.writer }}{% endif %}
         </td>
+        <td>
+            {% if post.image_url %}
+            <img src="{{post.image_url}}" alt={{ post.image_name }} width="150" height="150"/>
+            {% endif %}
+        </td>
     </tr>
     <hr>
 </table>

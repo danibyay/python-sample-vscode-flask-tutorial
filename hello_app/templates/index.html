@@ -43,11 +43,6 @@
         </tr></table>
     </form>
     {% for post in posts %}
-    <div>
-        <p>{{ post.author.username }} says: <b>{{ post.body }}</b></p>
-        {% if post.image_name %}
-        <img src="instance/photos/{{ post.image_name }}" alt={{ post.image_name }}/>
-        {% endif %}
-    </div>
+        {% include '_post.html' %}
     {% endfor %}
 {% endblock %}
