@@ -2,32 +2,52 @@
 
 {% block content %}
     <h1>Hi, {{ current_user.username }}!</h1>
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
-        <p>
-            {{ form.post_title.label }}<br>
-            {{ form.post_title(cols=20, rows=1) }}<br>
-            {% for error in form.post_title.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.post_author.label }}<br>
-            {{ form.post_author(cols=20, rows=1) }}<br>
-            {% for error in form.post_title.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.post_body.label }}<br>
-            {{ form.post_body(cols=40, rows=5) }}<br>
-            {% for error in form.post_title.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
+        <table><tr valign="top">
+            <td>
+                <p>
+                    {{ form.post_title.label }}<br>
+                    {{ form.post_title(cols=20, rows=1) }}<br>
+                    {% for error in form.post_title.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.post_author.label }}<br>
+                    {{ form.post_author(cols=20, rows=1) }}<br>
+                    {% for error in form.post_title.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.post_body.label }}<br>
+                    {{ form.post_body(cols=40, rows=5) }}<br>
+                    {% for error in form.post_title.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+            </td>
+            <td>
+                <p>
+                    {{ form.photo.label }}<br>
+                    Upload a file<br>
+                    {{form.photo()}}
+                    
+                    {% for error in form.post_title.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>{{ form.submit() }}</p>
+            </td>
+        </tr></table>
     </form>
     {% for post in posts %}
-    <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
+    <div>
+        <p>{{ post.author.username }} says: <b>{{ post.body }}</b></p>
+        {% if post.image_name %}
+        <img src="instance/photos/{{ post.image_name }}" alt={{ post.image_name }}/>
+        {% endif %}
+    </div>
     {% endfor %}
 {% endblock %}

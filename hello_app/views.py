@@ -1,13 +1,16 @@
 from flask import Flask, render_template, flash, redirect, url_for, request
 from . import app
 from . import db
+from . import container_client, container_name, blob_service_client
 from .models import User, Post
 from .forms import LoginForm, RegistrationForm, EditProfileForm, PostForm
 from flask_login import current_user, login_user
 from flask_login import logout_user
 from flask_login import login_required
 from werkzeug.urls import url_parse
+from werkzeug.utils import secure_filename
 from datetime import datetime
+import os, uuid
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -16,23 +19,29 @@ from datetime import datetime
 def index():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.post_title.data, writer=form.post_author.data, body=form.post_body.data, author=current_user)
+        
+        
+        image_data = form.photo.data
+        # I need to get the original path-to-file
+        filename = secure_filename(image_data.filename)
+        full_to_save_path = os.path.join(app.instance_path, 'photos', filename)
+        image_data.save(full_to_save_path)
+
+        blob_client = blob_service_client.get_blob_client(container=container_name, blob="myfile" + str(uuid.uuid4()) + ".png")
+        with open(full_to_save_path, "rb") as data:
+            blob_client.upload_blob(data)
+
+
+        post = Post(title=form.post_title.data, writer=form.post_author.data, body=form.post_body.data, author=current_user, image_name=filename)
         db.session.add(post)
         db.session.commit()
         flash('Your post is now live!')
         return redirect(url_for('index'))
-    # posts = [
-    #     {
-    #         'author': {'username': 'John'},
-    #         'body': 'Beautiful day in Portland!'
-    #     },
-    #     {
-    #         'author': {'username': 'Susan'},
-    #         'body': 'The Avengers movie was so cool'
-    #     }
-    # ]
+
+        
+        
     posts = Post.query.all()
-    return render_template('index.html', title='Home Page', form=form, posts=posts)
+    return render_template('index.html', title='Home Page', form=form, posts=posts) ## add a render element of image
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
